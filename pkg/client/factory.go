@@ -10,7 +10,7 @@ import (
 
 var logger = logging.GetLogger("FS Factory")
 
-// DecisionMode express a targeting operator
+// DecisionMode represents the decision mode of the Client engine
 type DecisionMode string
 
 // The different targeting operators
