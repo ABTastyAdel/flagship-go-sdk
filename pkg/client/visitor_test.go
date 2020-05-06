@@ -139,7 +139,7 @@ func TestSynchronizeModifications(t *testing.T) {
 		t.Errorf("Flag synchronization should not raise error. Got %v", err)
 	}
 
-	flag, ok = visitor.GetAllModifications()["test_string"]
+	_, ok = visitor.GetAllModifications()["test_string"]
 
 	if !ok {
 		t.Errorf("Flag should exist after synchronization")

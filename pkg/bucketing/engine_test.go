@@ -54,14 +54,14 @@ func TestNewEngine(t *testing.T) {
 
 func TestLoad(t *testing.T) {
 	eg := utils.NewExecGroup(context.Background())
-	engine, err := NewEngine(testEnvID, eg)
-	err = engine.Load()
+	engine, _ := NewEngine(testEnvID, eg)
+	err := engine.Load()
 
 	if err == nil {
 		t.Error("Expected error for incorrect env ID")
 	}
 
-	engine, err = NewEngine(realEnvID, eg)
+	engine, _ = NewEngine(realEnvID, eg)
 	err = engine.Load()
 
 	if err != nil {
@@ -71,7 +71,7 @@ func TestLoad(t *testing.T) {
 
 func TestGetModifications(t *testing.T) {
 	eg := utils.NewExecGroup(context.Background())
-	engine, err := NewEngine(testEnvID, eg)
+	engine, _ := NewEngine(testEnvID, eg)
 
 	modifs, err := engine.GetModifications(testVID, testContext)
 
@@ -83,7 +83,7 @@ func TestGetModifications(t *testing.T) {
 		t.Errorf("Unexpected modifs for test env ID. Got %v", modifs)
 	}
 
-	engine, err = NewEngine(realEnvID, eg)
+	engine, _ = NewEngine(realEnvID, eg)
 
 	modifs, err = engine.GetModifications(testVID, testContext)
 
@@ -94,7 +94,7 @@ func TestGetModifications(t *testing.T) {
 
 func TestPanic(t *testing.T) {
 	eg := utils.NewExecGroup(context.Background())
-	engine, err := NewEngine(testEnvID, eg)
+	engine, _ := NewEngine(testEnvID, eg)
 
 	config := &Configuration{
 		Campaigns: []*Campaign{&Campaign{

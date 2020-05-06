@@ -143,7 +143,7 @@ func (v *FlagshipVisitor) getModification(key string, activate bool) (flagValue 
 		})
 
 		if err != nil {
-			visitorLogger.Debug(fmt.Sprintf("Error occured when activating campaign : %v.", err))
+			visitorLogger.Debug(fmt.Sprintf("Error occurred when activating campaign : %v.", err))
 		}
 		// ok := v.batchHitProcessor.ProcessHit(v.ID, &tracking.ActivationHit{
 		// 	VariationGroupID: flagInfos.Campaign.VariationGroupID,
@@ -151,7 +151,7 @@ func (v *FlagshipVisitor) getModification(key string, activate bool) (flagValue 
 		// })
 
 		// if !ok {
-		// 	visitorLogger.Debug(fmt.Sprintf("Error occured when activating campaign : %v.", err))
+		// 	visitorLogger.Debug(fmt.Sprintf("Error occurred when activating campaign : %v.", err))
 		// 	err = errors.New("Error when registering hit")
 		// }
 	}
@@ -175,7 +175,7 @@ func (v *FlagshipVisitor) GetModificationBool(key string, defaultValue bool, act
 	val, err := v.getModification(key, activate)
 
 	if err != nil {
-		visitorLogger.Debug(fmt.Sprintf("Error occured when getting flag value : %v. Fallback to default value", err))
+		visitorLogger.Debug(fmt.Sprintf("Error occurred when getting flag value : %v. Fallback to default value", err))
 		return defaultValue, err
 	}
 
@@ -205,7 +205,7 @@ func (v *FlagshipVisitor) GetModificationString(key string, defaultValue string,
 	val, err := v.getModification(key, activate)
 
 	if err != nil {
-		visitorLogger.Debug(fmt.Sprintf("Error occured when getting flag value : %v. Fallback to default value", err))
+		visitorLogger.Debug(fmt.Sprintf("Error occurred when getting flag value : %v. Fallback to default value", err))
 		return defaultValue, err
 	}
 
@@ -235,7 +235,7 @@ func (v *FlagshipVisitor) GetModificationNumber(key string, defaultValue float64
 	val, err := v.getModification(key, activate)
 
 	if err != nil {
-		visitorLogger.Debug(fmt.Sprintf("Error occured when getting flag value : %v. Fallback to default value", err))
+		visitorLogger.Debug(fmt.Sprintf("Error occurred when getting flag value : %v. Fallback to default value", err))
 		return defaultValue, err
 	}
 

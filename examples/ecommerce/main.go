@@ -64,9 +64,9 @@ func main() {
 
 			if fsClient != nil && fsVisitor != nil {
 				fsVisitor.SynchronizeModifications()
-				valueBtnColor, err = fsVisitor.GetModificationString("btn-color", "rgb(249, 167, 67)", true)
-				valueTxtColor, err = fsVisitor.GetModificationString("txt-color", "#fff", true)
-				valueBtnText, err = fsVisitor.GetModificationString("btn-text", "Buy for 15% off", true)
+				valueBtnColor, _ = fsVisitor.GetModificationString("btn-color", "rgb(249, 167, 67)", true)
+				valueTxtColor, _ = fsVisitor.GetModificationString("txt-color", "#fff", true)
+				valueBtnText, _ = fsVisitor.GetModificationString("btn-text", "Buy for 15% off", true)
 			}
 			variables = fsVisitor.GetAllModifications()
 		}

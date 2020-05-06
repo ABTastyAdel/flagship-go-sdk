@@ -37,12 +37,11 @@ func (ed *HTTPHitDispatcher) DispatchHit(hit *BatchHit) (bool, error) {
 	}
 
 	err := ed.trackingAPIClient.sendInternalHit(hit)
-	var success bool
+	var success = true
 	if err != nil {
 		dispatcherLogger.Error("Hit sending failed :", err)
 		success = false
 	}
-	success = true
 	return success, err
 }
 

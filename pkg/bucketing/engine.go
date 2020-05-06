@@ -125,7 +125,7 @@ func (b *Engine) GetModifications(visitorID string, context map[string]interface
 		for _, vg := range c.VariationGroups {
 			matched, err := TargetingMatch(vg, visitorID, context)
 			if err != nil {
-				logger.Warning(fmt.Sprintf("Error occured when checking targeting : %v", err))
+				logger.Warning(fmt.Sprintf("Error occurred when checking targeting : %v", err))
 				continue
 			}
 
@@ -138,7 +138,7 @@ func (b *Engine) GetModifications(visitorID string, context map[string]interface
 		if matchedVg != nil {
 			variation, err := GetRandomAllocation(visitorID, matchedVg)
 			if err != nil {
-				logger.Warning(fmt.Sprintf("Error occured when allocating variation : %v", err))
+				logger.Warning(fmt.Sprintf("Error occurred when allocating variation : %v", err))
 				continue
 			}
 			campaign := decision.APIClientCampaign{

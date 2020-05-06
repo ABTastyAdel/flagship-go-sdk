@@ -110,7 +110,7 @@ func TestPost(t *testing.T) {
 	defer ts.Close()
 
 	bodyObj := body{"one", 1}
-	b, err := json.Marshal(bodyObj)
+	b, _ := json.Marshal(bodyObj)
 
 	httpreq := NewHTTPRequest(ts.URL, HTTPOptions{})
 	resp, _, _, _ := httpreq.Do("/good", "POST", bytes.NewBuffer(b))
@@ -145,7 +145,7 @@ func TestGetRetry(t *testing.T) {
 		Retries: 10,
 	})
 
-	resp, _, _, err := httpreq.Do("/retry", "GET", nil)
+	resp, _, _, _ := httpreq.Do("/retry", "GET", nil)
 	if "ok\n" != string(resp) {
 		t.Errorf("Expected response %v, got %v", "ok\n", resp)
 	}
