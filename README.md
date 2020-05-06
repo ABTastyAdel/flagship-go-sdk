@@ -27,4 +27,4 @@
 ## Authors
 - Guillaume Jacquart [@guillaumejacquart](https://github.com/guillaumejacquart) 
 ## Licence
-[MIT License.](https://github.com/jaredpalmer/formik/blob/master/LICENSE)
+[Apache License.](https://github.com/abtasty/flagship-go-sdk/blob/master/LICENSE)
