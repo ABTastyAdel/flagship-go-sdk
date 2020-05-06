@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"time"
 
 	"github.com/abtasty/flagship-go-sdk"
 	"github.com/abtasty/flagship-go-sdk/pkg/bucketing"
@@ -22,9 +23,7 @@ func main() {
 
 	testGetValue(fsClient)
 
-	fsClient, err = flagship.Start(testEnvId, client.WithBucketing(bucketing.EngineOptions{
-		PollingInterval: 1000,
-	}))
+	fsClient, err = flagship.Start(testEnvId, client.WithBucketing(bucketing.PollingInterval(2*time.Second)))
 
 	if err != nil {
 		log.Printf("Flagship client error %v", err)
