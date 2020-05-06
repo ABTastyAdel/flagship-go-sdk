@@ -85,7 +85,7 @@ func TestGetModifications(t *testing.T) {
 
 	engine, _ = NewEngine(realEnvID, eg)
 
-	modifs, err = engine.GetModifications(testVID, testContext)
+	_, err = engine.GetModifications(testVID, testContext)
 
 	if err != nil {
 		t.Errorf("Unexpected error for correct env ID: %v", err)

@@ -73,19 +73,19 @@ func targetingMatchOperator(operator TargetingOperator, targetingValue interface
 		targetingList, convOk := takeSliceArg(targetingValue)
 		if !convOk {
 			err = errors.New("Could not convert list targeting")
-		} else {
-			if operator == NOT_EQUALS {
-				match = true
-				for _, v := range targetingList {
-					subValueMatch, err := targetingMatchOperator(operator, v, contextValue)
-					match = match && err == nil && subValueMatch
-				}
+			return match, err
+		}
+		if operator == NOT_EQUALS {
+			match = true
+			for _, v := range targetingList {
+				subValueMatch, err := targetingMatchOperator(operator, v, contextValue)
+				match = match && err == nil && subValueMatch
 			}
-			if operator == EQUALS {
-				for _, v := range targetingList {
-					subValueMatch, err := targetingMatchOperator(operator, v, contextValue)
-					match = match || (err == nil && subValueMatch)
-				}
+		}
+		if operator == EQUALS {
+			for _, v := range targetingList {
+				subValueMatch, err := targetingMatchOperator(operator, v, contextValue)
+				match = match || (err == nil && subValueMatch)
 			}
 		}
 	}
