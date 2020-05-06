@@ -41,7 +41,7 @@ func createMockClient() decision.ClientInterface {
 	return decision.NewAPIClientMock(testEnvID, &decision.APIClientResponse{
 		VisitorID: "test_vid",
 		Campaigns: []decision.APIClientCampaign{
-			decision.APIClientCampaign{
+			{
 				ID:               caID,
 				VariationGroupID: vgID,
 				Variation:        variation,

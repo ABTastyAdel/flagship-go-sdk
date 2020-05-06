@@ -46,7 +46,7 @@ func TestNewHTTPRequestOptions(t *testing.T) {
 		Retries: 2,
 		Timeout: 10,
 		Headers: []Header{
-			Header{Name: "test", Value: "value"},
+			{Name: "test", Value: "value"},
 		},
 	})
 

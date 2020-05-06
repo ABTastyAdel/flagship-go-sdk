@@ -97,20 +97,20 @@ func TestPanic(t *testing.T) {
 	engine, _ := NewEngine(testEnvID, eg)
 
 	config := &Configuration{
-		Campaigns: []*Campaign{&Campaign{
+		Campaigns: []*Campaign{{
 			ID: "test_cid",
-			VariationGroups: []*VariationGroup{&VariationGroup{
+			VariationGroups: []*VariationGroup{{
 				ID: "test_vgid",
 				Targeting: TargetingWrapper{
 					TargetingGroups: []*TargetingGroup{{
-						Targetings: []*Targeting{&Targeting{
+						Targetings: []*Targeting{{
 							Operator: EQUALS,
 							Key:      "test",
 							Value:    true,
 						}},
 					}},
 				},
-				Variations: []*Variation{&Variation{
+				Variations: []*Variation{{
 					ID:         "1",
 					Allocation: 100,
 					Modifications: decision.APIClientModification{
@@ -148,7 +148,7 @@ func TestPollingPanic(t *testing.T) {
 	engine, _ := NewEngine(testEnvID, eg, PollingInterval(1*time.Second))
 
 	config := &Configuration{
-		Campaigns: []*Campaign{&Campaign{
+		Campaigns: []*Campaign{{
 			ID: "test_cid",
 		}},
 	}
@@ -174,7 +174,7 @@ func TestClose(t *testing.T) {
 	engine, _ := NewEngine(testEnvID, eg, PollingInterval(1*time.Second))
 
 	config := &Configuration{
-		Campaigns: []*Campaign{&Campaign{
+		Campaigns: []*Campaign{{
 			ID: "test_cid",
 		}},
 	}

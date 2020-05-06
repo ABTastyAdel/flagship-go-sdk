@@ -183,9 +183,9 @@ func TestTargetingMatch(t *testing.T) {
 	vg := VariationGroup{
 		Targeting: TargetingWrapper{
 			TargetingGroups: []*TargetingGroup{
-				&TargetingGroup{
+				{
 					Targetings: []*Targeting{
-						&Targeting{
+						{
 							Operator: EQUALS,
 							Key:      "test",
 							Value:    1,
