@@ -1,0 +1,94 @@
+package main
+
+import (
+	"encoding/base64"
+	"encoding/json"
+	"log"
+	"net/http"
+
+	"github.com/abtasty/flagship-go-sdk/pkg/decision"
+
+	"github.com/abtasty/flagship-go-sdk"
+	"github.com/abtasty/flagship-go-sdk/pkg/client"
+	"github.com/gin-gonic/gin"
+)
+
+var fsClients = make(map[string]*client.FlagshipClient)
+var fsVisitors = make(map[string]*client.FlagshipVisitor)
+
+// FSEnvInfo Binding env from JSON
+type FSEnvInfo struct {
+	EnvironmentID string                 `json:"environment_id" binding:"required"`
+	VisitorID     string                 `json:"visitor_id" binding:"required"`
+	Context       map[string]interface{} `json:"context" binding:"required"`
+}
+
+func main() {
+	router := gin.Default()
+
+	router.Static("/static", "public")
+	router.LoadHTMLGlob("public/*.html")
+
+	router.GET("/", func(c *gin.Context) {
+		fsCookie, err := c.Cookie("fscookie")
+
+		var fsInfo FSEnvInfo = FSEnvInfo{}
+		if fsCookie != "" {
+			data, err := base64.StdEncoding.DecodeString(fsCookie)
+			if err == nil {
+				err = json.Unmarshal(data, &fsInfo)
+				log.Println(err)
+				log.Println(fsInfo)
+			}
+			if err != nil {
+				log.Println(err)
+			}
+		}
+
+		valueBtnColor := "rgb(249, 167, 67)"
+		valueTxtColor := "#fff"
+		valueBtnText := "Buy for 15% off"
+
+		var variables = make(map[string]decision.APIClientFlagInfos)
+		if fsInfo.EnvironmentID != "" && fsInfo.VisitorID != "" {
+			fsClient, _ := fsClients[fsInfo.EnvironmentID]
+			if fsClient == nil {
+				fsClient, err = flagship.Start(fsInfo.EnvironmentID, client.WithBucketing())
+			}
+			fsClients[fsInfo.EnvironmentID] = fsClient
+			fsVisitor, _ := fsVisitors[fsInfo.EnvironmentID+"-"+fsInfo.VisitorID]
+			if fsVisitor == nil {
+				fsVisitor, err = fsClient.NewVisitor(fsInfo.VisitorID, fsInfo.Context)
+			}
+			fsClients[fsInfo.EnvironmentID] = fsClient
+
+			if fsClient != nil && fsVisitor != nil {
+				fsVisitor.SynchronizeModifications()
+				valueBtnColor, err = fsVisitor.GetModificationString("btn-color", "rgb(249, 167, 67)", true)
+				valueTxtColor, err = fsVisitor.GetModificationString("txt-color", "#fff", true)
+				valueBtnText, err = fsVisitor.GetModificationString("btn-text", "Buy for 15% off", true)
+			}
+			variables = fsVisitor.GetAllModifications()
+		}
+
+		variablesObj := gin.H{}
+
+		for k, v := range variables {
+			variablesObj[k] = v.Value
+		}
+
+		variablesJSON, _ := json.Marshal(variablesObj)
+
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"flagship": gin.H{
+				"btnColor":  valueBtnColor,
+				"txtColor":  valueTxtColor,
+				"btnText":   valueBtnText,
+				"error":     err,
+				"variables": string(variablesJSON),
+			},
+		})
+	})
+
+	router.Run(":8080")
+}

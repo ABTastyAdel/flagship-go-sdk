@@ -1,0 +1,43 @@
+package decision
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+// APIClientMock represents the API client mock informations
+type APIClientMock struct {
+	envID        string
+	responseMock *APIClientResponse
+	statusCode   int
+}
+
+// NewAPIClientMock creates a fake api client that returns a specific response
+func NewAPIClientMock(envID string, responseMock *APIClientResponse, statusCode int) *APIClientMock {
+	res := APIClientMock{
+		envID:        envID,
+		responseMock: responseMock,
+		statusCode:   statusCode,
+	}
+
+	return &res
+}
+
+// GetModifications gets modifications from Decision API
+func (r APIClientMock) GetModifications(visitorID string, context map[string]interface{}) (*APIClientResponse, error) {
+	_, err := json.Marshal(APIClientRequest{
+		VisitorID:  visitorID,
+		Context:    context,
+		TriggerHit: false,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if r.statusCode != 200 {
+		return nil, fmt.Errorf("Status code %v", r.statusCode)
+	}
+
+	return r.responseMock, nil
+}
