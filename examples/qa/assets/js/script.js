@@ -68,6 +68,11 @@ var app = new Vue({
           }
         );
     },
+    changeType(e) {
+      this.hit = {
+        t: this.hit.t,
+      };
+    },
     sendHit() {
       this.eventOk = false;
       this.eventError = null;
