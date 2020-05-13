@@ -41,7 +41,7 @@ func TestSendInternalHit(t *testing.T) {
 	err = client.sendInternalHit(event)
 
 	if err != nil {
-		t.Error("Right hit should not return and err")
+		t.Errorf("Right hit should not return and err : %v", err)
 	}
 }
 

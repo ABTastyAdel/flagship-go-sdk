@@ -127,27 +127,25 @@ func (p *BatchHitProcessor) Start(ctx context.Context) {
 
 // ProcessHit takes the given user hit (can be an impression or conversion hit) and queues it up to be dispatched
 // to the datacollect endpoint
-func (p *BatchHitProcessor) ProcessHit(visitorID string, hit HitInterface) bool {
+func (p *BatchHitProcessor) ProcessHit(visitorID string, hit HitInterface) (bool, []error) {
 	if p.Q.Size() >= p.MaxQueueSize {
 		pLogger.Warning("MaxQueueSize has been met. Discarding hit")
-		return false
+		return false, nil
 	}
 
 	hit.setBaseInfos(p.envID, visitorID)
 	errs := hit.validate()
 	if len(errs) > 0 {
-		errorStrings := []string{}
 		for _, e := range errs {
 			apiLogger.Error("Hit validation error : %v", e)
-			errorStrings = append(errorStrings, e.Error())
 		}
-		return false
+		return false, errs
 	}
 
 	p.Q.Add(hit)
 
 	if p.Q.Size() < p.BatchSize {
-		return true
+		return true, nil
 	}
 
 	if p.processing.TryAcquire(1) {
@@ -160,7 +158,7 @@ func (p *BatchHitProcessor) ProcessHit(visitorID string, hit HitInterface) bool 
 		}()
 	}
 
-	return true
+	return true, nil
 }
 
 // hitsCount returns size of an hit queue

@@ -276,10 +276,14 @@ func (v *FlagshipVisitor) SendHit(hit tracking.HitInterface) (err error) {
 	}()
 
 	visitorLogger.Info(fmt.Sprintf("Sending hit for visitor with id : %s", v.ID))
-	ok := v.batchHitProcessor.ProcessHit(v.ID, hit)
+	ok, errs := v.batchHitProcessor.ProcessHit(v.ID, hit)
 
 	if !ok {
-		err = errors.New("Error when registering hit")
+		errorStrings := []string{}
+		for _, e := range errs {
+			errorStrings = append(errorStrings, e.Error())
+		}
+		err = fmt.Errorf("Error when registering hit: %s", strings.Join(errorStrings, ", "))
 	}
 	return err
 }

@@ -154,6 +154,7 @@ func main() {
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
 		}
 
 		fsSession := getFsSession(c)
@@ -183,16 +184,19 @@ func main() {
 		fsClient, _ := fsClients[fsSession.EnvID]
 		if fsClient == nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "FS Client not initialized"})
+			return
 		}
 
 		fsVisitor, err := fsClient.NewVisitor(json.VisitorID, json.Context)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
 		}
 
 		err = fsVisitor.SynchronizeModifications()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
 		}
 
 		fsVisitors[fsSession.EnvID+"-"+json.VisitorID] = fsVisitor
@@ -223,11 +227,13 @@ func main() {
 		fsClient, _ := fsClients[fsSession.EnvID]
 		if fsClient == nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "FS Client not initialized"})
+			return
 		}
 
 		fsVisitor, _ := fsVisitors[fsSession.EnvID+"-"+fsSession.VisitorID]
 		if fsVisitor == nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "FS Visitor not initialized"})
+			return
 		}
 
 		var value interface{}
@@ -285,11 +291,13 @@ func main() {
 		fsClient, _ := fsClients[fsSession.EnvID]
 		if fsClient == nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "FS Client not initialized"})
+			return
 		}
 
 		fsVisitor, _ := fsVisitors[fsSession.EnvID+"-"+fsSession.VisitorID]
 		if fsVisitor == nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "FS Visitor not initialized"})
+			return
 		}
 
 		hitType := json.HitType
@@ -308,7 +316,11 @@ func main() {
 			hit = &tracking.ItemHit{TransactionID: json.TransactionID, Name: json.ItemName, Quantity: json.ItemQuantity}
 		}
 
-		fsVisitor.SendHit(hit)
+		err := fsVisitor.SendHit(hit)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 
 		c.JSON(http.StatusOK, gin.H{"status": "ok", "hitType": hitType})
 	})

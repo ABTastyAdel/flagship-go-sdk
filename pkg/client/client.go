@@ -2,7 +2,6 @@ package client
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"strings"
 
@@ -110,10 +109,14 @@ func (c *FlagshipClient) SendHit(visitorID string, hit tracking.HitInterface) (e
 	}()
 
 	clientLogger.Info(fmt.Sprintf("Sending hit for visitor with id : %s", visitorID))
-	ok := c.batchHitProcessor.ProcessHit(visitorID, hit)
+	ok, errs := c.batchHitProcessor.ProcessHit(visitorID, hit)
 
 	if !ok {
-		err = errors.New("Error when registering hit")
+		errorStrings := []string{}
+		for _, e := range errs {
+			errorStrings = append(errorStrings, e.Error())
+		}
+		err = fmt.Errorf("Error when registering hit: %s", strings.Join(errorStrings, ", "))
 	}
 	return err
 }

@@ -11,7 +11,7 @@ import (
 	"github.com/abtasty/flagship-go-sdk/pkg/logging"
 )
 
-const defaultTimeout = 2 * time.Second
+const defaultTimeout = 10 * time.Second
 
 var apiLogger = logging.GetLogger("HTTP Request")
 

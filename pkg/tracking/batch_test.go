@@ -82,7 +82,7 @@ func TestBatch_InvalidHit(t *testing.T) {
 
 	wrongEvent := &EventHit{}
 
-	res := processor.ProcessHit(testVisitorID, wrongEvent)
+	res, _ := processor.ProcessHit(testVisitorID, wrongEvent)
 
 	assert.Equal(t, false, res)
 	assert.Equal(t, 0, processor.hitsCount())
